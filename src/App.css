@@ -1,21 +1,16 @@
 
 #root {
-  max-width: 1280px;
+  max-width: 1440px;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  text-align: left;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
+.kyc-logo {
+  height: 2.5em;
   will-change: filter;
   transition: filter 300ms;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em rgba(245, 166, 35, 0.6));
-}
-.logo.react:hover {
+.kyc-logo:hover {
   filter: drop-shadow(0 0 2em rgba(245, 166, 35, 0.6));
 }
 
@@ -29,15 +24,74 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
+  .kyc-spin {
     animation: logo-spin infinite 20s linear;
   }
 }
 
-.card {
+.kyc-card {
   padding: 2em;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 0.5em;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
-.read-the-docs {
-  color: #888;
+.kyc-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.kyc-fade-in {
+  animation: kyc-fade-in 0.5s ease-out;
+}
+
+@keyframes kyc-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Print styles for Verification History */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  
+  .max-w-7xl, .max-w-7xl * {
+    visibility: visible;
+  }
+  
+  button, .print-hide {
+    display: none !important;
+  }
+  
+  .max-w-7xl {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  
+  h1 {
+    font-size: 24px !important;
+    margin-bottom: 20px !important;
+  }
+  
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+  }
+  
+  th, td {
+    border: 1px solid #ddd !important;
+    padding: 8px !important;
+  }
+  
+  th {
+    background-color: #f2f2f2 !important;
+  }
 }

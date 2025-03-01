@@ -1,117 +1,249 @@
 
-import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
-import { ShieldCheck } from "lucide-react";
-import LoginForm from "@/components/auth/LoginForm";
+import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Mail, Loader2 } from "lucide-react";
 
 const Login: React.FC = () => {
-  // Add page transition effect
-  useEffect(() => {
-    document.body.classList.add('page-transition-enter');
-    document.body.classList.add('page-transition-enter-active');
+  const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [resendDisabled, setResendDisabled] = useState(false);
+  const [countdown, setCountdown] = useState(0);
+  const { toast } = useToast();
+  const navigate = useNavigate();
+
+  const handleSendOTP = (e: React.FormEvent) => {
+    e.preventDefault();
     
-    return () => {
-      document.body.classList.remove('page-transition-enter');
-      document.body.classList.remove('page-transition-enter-active');
-    };
-  }, []);
+    if (!email) {
+      toast({
+        title: "Email Required",
+        description: "Please enter your email address to continue.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast({
+        title: "Invalid Email",
+        description: "Please enter a valid email address.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    setIsLoading(true);
+    
+    // Simulate API call to send OTP
+    setTimeout(() => {
+      setIsLoading(false);
+      setOtpSent(true);
+      toast({
+        title: "OTP Sent",
+        description: "A verification code has been sent to your email.",
+      });
+      
+      // Start countdown for resend
+      setResendDisabled(true);
+      setCountdown(30);
+      const timer = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            setResendDisabled(false);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }, 1500);
+  };
+
+  const handleVerifyOTP = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!otp) {
+      toast({
+        title: "OTP Required",
+        description: "Please enter the verification code sent to your email.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    setIsLoading(true);
+    
+    // Simulate API call to verify OTP
+    setTimeout(() => {
+      setIsLoading(false);
+      
+      // For demo purposes, any 6-digit OTP is considered valid
+      if (otp.length === 6) {
+        toast({
+          title: "Login Successful",
+          description: "Welcome to KYCFabric!",
+        });
+        navigate("/dashboard");
+      } else {
+        toast({
+          title: "Invalid OTP",
+          description: "The verification code you entered is incorrect. Please try again.",
+          variant: "destructive",
+        });
+      }
+    }, 1500);
+  };
+
+  const handleResendOTP = () => {
+    if (resendDisabled) return;
+    
+    setIsLoading(true);
+    
+    // Simulate API call to resend OTP
+    setTimeout(() => {
+      setIsLoading(false);
+      toast({
+        title: "OTP Resent",
+        description: "A new verification code has been sent to your email.",
+      });
+      
+      // Reset countdown for resend
+      setResendDisabled(true);
+      setCountdown(30);
+      const timer = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            setResendDisabled(false);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }, 1500);
+  };
 
   return (
-    <div className="min-h-screen flex flex-col sm:flex-row">
-      {/* Left Side - Form */}
-      <div className="flex-1 flex flex-col justify-center items-center p-6 sm:p-10 animate-fade-in">
-        <div className="w-full max-w-md mx-auto">
-          <div className="text-center mb-8">
-            <Link to="/" className="inline-block">
-              <span className="text-2xl font-semibold">
-                <span className="text-primary">KYC</span>
-                <span className="font-light">Fabric</span>
-              </span>
-            </Link>
-            <h1 className="text-2xl font-bold mt-6 mb-2">Welcome back</h1>
-            <p className="text-muted-foreground">Sign in to your account to continue</p>
-          </div>
-          
-          <LoginForm />
-          
-          <div className="mt-8 text-center">
-            <p className="text-sm text-muted-foreground">
-              Don't have an account?{" "}
-              <Link to="/register" className="font-medium text-primary hover:underline">
-                Register now
-              </Link>
-            </p>
-          </div>
+    <div className="min-h-screen flex items-center justify-center bg-background px-4 py-12">
+      <div className="w-full max-w-md">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-bold kyc-gradient-text">KYCFabric</h2>
+          <p className="text-muted-foreground mt-2">Log in to your business account</p>
         </div>
-      </div>
-      
-      {/* Right Side - Illustration/Info */}
-      <div className="hidden sm:flex flex-1 bg-primary/5 justify-center items-center p-10 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/10"></div>
         
-        <div className="relative z-10 max-w-md text-center">
-          <div className="w-16 h-16 bg-primary/10 rounded-full grid place-items-center mx-auto mb-6">
-            <ShieldCheck className="h-8 w-8 text-primary" />
-          </div>
-          <h2 className="text-2xl font-semibold mb-4">Secure KYC Verification</h2>
-          <p className="text-muted-foreground mb-6">
-            Streamline your customer verification process with our comprehensive
-            KYC platform. Validate identities securely and efficiently.
-          </p>
-          
-          <div className="space-y-3">
-            <div className="p-3 bg-background rounded-lg border shadow-sm">
-              <div className="flex items-center">
-                <div className="w-10 h-10 rounded-full bg-primary/10 grid place-items-center flex-shrink-0">
-                  <span className="text-primary font-medium">1</span>
+        <Card className="w-full">
+          <CardHeader>
+            <CardTitle>Sign In</CardTitle>
+            <CardDescription>
+              Enter your business email to continue
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            {!otpSent ? (
+              <form onSubmit={handleSendOTP} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email Address</Label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="you@company.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="pl-10"
+                      autoComplete="email"
+                      autoFocus
+                    />
+                  </div>
                 </div>
-                <div className="ml-4 text-left">
-                  <h3 className="font-medium">Multiple Verification Methods</h3>
+                
+                <Button type="submit" className="w-full kyc-btn-primary" disabled={isLoading}>
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Sending OTP...
+                    </>
+                  ) : (
+                    "Send Verification Code"
+                  )}
+                </Button>
+              </form>
+            ) : (
+              <form onSubmit={handleVerifyOTP} className="space-y-4">
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <Label htmlFor="otp">Verification Code</Label>
+                    <Button 
+                      type="button" 
+                      variant="ghost" 
+                      size="sm" 
+                      onClick={handleResendOTP}
+                      disabled={resendDisabled || isLoading}
+                      className="h-auto py-0 px-2 text-xs"
+                    >
+                      {resendDisabled ? `Resend in ${countdown}s` : "Resend Code"}
+                    </Button>
+                  </div>
+                  <Input
+                    id="otp"
+                    type="text"
+                    placeholder="Enter 6-digit code"
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                    className="text-center tracking-widest"
+                    maxLength={6}
+                    autoFocus
+                  />
                   <p className="text-xs text-muted-foreground">
-                    PAN, Aadhaar, Voter ID, Vehicle RC, and Passport
+                    A verification code has been sent to <span className="font-medium">{email}</span>
                   </p>
                 </div>
-              </div>
+                
+                <Button type="submit" className="w-full kyc-btn-primary" disabled={isLoading}>
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Verifying...
+                    </>
+                  ) : (
+                    "Verify & Log In"
+                  )}
+                </Button>
+                
+                <div className="text-center">
+                  <Button 
+                    type="button" 
+                    variant="link" 
+                    className="text-sm text-muted-foreground"
+                    onClick={() => setOtpSent(false)}
+                  >
+                    Use a different email
+                  </Button>
+                </div>
+              </form>
+            )}
+          </CardContent>
+          <CardFooter className="flex flex-col space-y-2">
+            <div className="text-center w-full">
+              <p className="text-sm text-muted-foreground">
+                Don't have an account?{" "}
+                <Link to="/register" className="text-primary hover:underline font-medium">
+                  Register now
+                </Link>
+              </p>
             </div>
-            
-            <div className="p-3 bg-background rounded-lg border shadow-sm">
-              <div className="flex items-center">
-                <div className="w-10 h-10 rounded-full bg-primary/10 grid place-items-center flex-shrink-0">
-                  <span className="text-primary font-medium">2</span>
-                </div>
-                <div className="ml-4 text-left">
-                  <h3 className="font-medium">Credit-Based System</h3>
-                  <p className="text-xs text-muted-foreground">
-                    Pay only for the verifications you perform
-                  </p>
-                </div>
-              </div>
-            </div>
-            
-            <div className="p-3 bg-background rounded-lg border shadow-sm">
-              <div className="flex items-center">
-                <div className="w-10 h-10 rounded-full bg-primary/10 grid place-items-center flex-shrink-0">
-                  <span className="text-primary font-medium">3</span>
-                </div>
-                <div className="ml-4 text-left">
-                  <h3 className="font-medium">Detailed Reporting</h3>
-                  <p className="text-xs text-muted-foreground">
-                    Access comprehensive verification history
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="mt-8">
-            <Link to="/about">
-              <Button variant="outline" className="bg-background">
-                Learn More
-              </Button>
-            </Link>
-          </div>
-        </div>
+          </CardFooter>
+        </Card>
       </div>
     </div>
   );
