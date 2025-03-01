@@ -1,6 +1,6 @@
 
 import { useState } from 'react'
-import { Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import './App.css'
 
 // Pages
@@ -19,20 +19,22 @@ import NotFound from './pages/NotFound';
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Index />} />
-      <Route path="/about" element={<About />} />
-      <Route path="/contact" element={<Contact />} />
-      <Route path="/pricing" element={<Pricing />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/application-progress" element={<ApplicationProgress />} />
-      <Route path="/verification-form/:type" element={<VerificationForm />} />
-      <Route path="/verification-history" element={<VerificationHistory />} />
-      <Route path="/credit-purchase" element={<CreditPurchase />} />
-      <Route path="*" element={<NotFound />} />
-    </Routes>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Index />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/pricing" element={<Pricing />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/application-progress" element={<ApplicationProgress />} />
+        <Route path="/verification-form/:type" element={<VerificationForm />} />
+        <Route path="/verification-history" element={<VerificationHistory />} />
+        <Route path="/credit-purchase" element={<CreditPurchase />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
