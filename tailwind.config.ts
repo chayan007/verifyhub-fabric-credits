@@ -62,6 +62,18 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				kycfabric: {
+					gold: {
+						light: '#FFD875',
+						DEFAULT: '#F5A623',
+						dark: '#C87B07'
+					},
+					navy: {
+						light: '#2E406B',
+						DEFAULT: '#1C2541',
+						dark: '#0B132B'
+					}
 				}
 			},
 			borderRadius: {
@@ -109,6 +121,10 @@ export default {
 				'float': {
 					'0%, 100%': { transform: 'translateY(0)' },
 					'50%': { transform: 'translateY(-5px)' }
+				},
+				'shimmer': {
+					'0%': { backgroundPosition: '-500px 0' },
+					'100%': { backgroundPosition: '500px 0' }
 				}
 			},
 			animation: {
@@ -119,11 +135,14 @@ export default {
 				'slide-up': 'slide-up 0.4s ease-out',
 				'slide-down': 'slide-down 0.4s ease-out',
 				'scale-in': 'scale-in 0.3s ease-out',
-				'float': 'float 5s ease-in-out infinite'
+				'float': 'float 5s ease-in-out infinite',
+				'shimmer': 'shimmer 2s infinite linear'
 			},
 			backgroundImage: {
 				'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
 				'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+				'kyc-gradient': 'linear-gradient(to bottom, #1C2541, #F5A623)',
+				'gold-gradient': 'linear-gradient(to bottom, #FFD875, #C87B07)',
 			}
 		}
 	},
