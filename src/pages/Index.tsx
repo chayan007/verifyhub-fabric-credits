@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -279,7 +278,11 @@ const Index: React.FC = () => {
                 </Button>
               </Link>
               <Link to="/contact">
-                <Button size="lg" variant="outline" className="w-full sm:w-auto border-primary-foreground/20 hover:bg-primary-foreground/10">
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="w-full sm:w-auto bg-white/10 border-white/30 text-white hover:bg-white/20"
+                >
                   Contact Sales
                 </Button>
               </Link>
@@ -293,7 +296,6 @@ const Index: React.FC = () => {
   );
 };
 
-// Feature data
 const features = [
   {
     title: "Multiple Verification Types",
@@ -327,7 +329,6 @@ const features = [
   }
 ];
 
-// Verification types data
 const verificationTypes = [
   {
     title: "PAN Verification",
@@ -367,7 +368,6 @@ const verificationTypes = [
   }
 ];
 
-// Credit system features
 const creditFeatures = [
   {
     title: "Transparent Pricing",
